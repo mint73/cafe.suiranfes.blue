@@ -8,7 +8,7 @@ import { productData } from './data';
 import { CreateCal } from './showCal';
 
 // Material UI
-import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Paper,Box } from '@mui/material';
 import Button from '@mui/material/Button';
 
 // Icons
@@ -147,53 +147,22 @@ function App() {
     console.log(_SellItem);
     setSellIetm(_SellItem);
   }
-
-  const [code, setCode] = useState('');
-
-  // 合計金額
-  let sum = 0;
-
-  // 模擬店かどうか判別
-  if (code.indexOf("焼きそば") === 0) {
-    const allArray = code.split(";");// 品ごとに分割
-    var nameArray: string[] = new Array(allArray.length - 1);
-    var costArray: number[] = new Array(allArray.length - 1);
-    var qtyArray: number[] = new Array(allArray.length - 1);
-    var sumArray: number[] = new Array(allArray.length - 1);
-    // それぞれの情報に分割
-    for (let i = 0; i < allArray.length; i++) {
-      let a = allArray[i].split(",");
-      let name = a[0];
-      let cost = Number(a[1]);
-      let qty = Number(a[2]);
-      let eachSum = Number(a[3]);
-      nameArray[i] = name;
-      costArray[i] = cost;
-      qtyArray[i] = qty;
-      sumArray[i] = eachSum;
-    }
-
-    // 合計金額を求める処理
-    for (let i = 0; i < sumArray.length - 1; i++) {
-      sum = sum + sumArray[i]
-    }
-    // console.log(sum);
-  }
-
-
-  // ページ処理
   
+  // ページ処理
   const [isVisible3, setIsVisible3] = useState<boolean>(true);
   const [isVisible4, setIsVisible4] = useState<boolean>(false);
+  const [BarColor,setBarColor] =useState<string[]>(["#afeeee","white"]);
 
   const Page3 = () => {
     setIsVisible3(true);
     setIsVisible4(false);
+    setBarColor(["#afeeee","white"])
     // stopScanning();
   }
   const Page4 = () => {
     setIsVisible3(false);
     setIsVisible4(true);
+    setBarColor(["white","#afeeee"])
     updateData();
     // stopScanning();
   }
@@ -230,8 +199,8 @@ function App() {
       {/* footer */}
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation>
-          <BottomNavigationAction label="電卓" icon={<CalculateIcon />} onClick={Page3} />
-          <BottomNavigationAction label="データ" icon={<DataThresholdingIcon />} onClick={Page4} />
+          <Box bgcolor={BarColor[0]}><BottomNavigationAction label="電卓" icon={<CalculateIcon />} onClick={Page3} /></Box>
+          <Box bgcolor={BarColor[1]}><BottomNavigationAction label="データ" icon={<DataThresholdingIcon />} onClick={Page4} /></Box>
         </BottomNavigation>
       </Paper>
     </div>
