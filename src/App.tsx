@@ -1,6 +1,5 @@
 // External Library
 import { useState } from 'react';
-import { useZxing } from 'react-zxing';
 
 // Internal Component
 import './style.css';
@@ -11,20 +10,12 @@ import { CreateCal } from './showCal';
 // Material UI
 import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 
 // Icons
 import CalculateIcon from '@mui/icons-material/Calculate';
 import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
-import ListIcon from '@mui/icons-material/List';
-import QrCodeIcon from '@mui/icons-material/QrCode2';
 import DataFromFirebase from './dataFromFirebase';
 import { PreserveDataComponent } from './dataToFirebase';
-
-// Default Data
-let products = [
-  { name: '', quantity: 0 },
-];
 
 interface Item {
   time: string;
@@ -33,28 +24,6 @@ interface Item {
 interface SellItem {
   item: string;
   quantity: number;
-}
-
-// 表を描画するTableコンポーネント
-function Table({ data }: { data: { name: string, quantity: number }[] }) {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>商品名</th>
-          <th>個数</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((product, index) => (
-          <tr key={index}>
-            <td>{product.name}</td>
-            <td>{product.quantity}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
 }
 
 //買われた総数を表示する表のコンポーネント
@@ -87,9 +56,6 @@ function App() {
   let timeArray: string[] = ["9:00", "10:00", "11:00"]; // 時間の配列
   let quantityArray: string[] = ["3", "5", "2"]; // 品物の個数の配列
   let items: Item[] = timeArray.map((time, index) => ({ time, quantity: quantityArray[index] }));
-  const [QR_flag, setFlag] = useState(false);
-  // 入力したお金 (後の処理でお釣りを求める)
-  const [inputValue, setInputValue] = useState(0);
 
   const in_order_to_set_array: SellItem[] = productData.map((data) => {
     const one_of_productData = {
@@ -214,92 +180,6 @@ function App() {
     // console.log(sum);
   }
 
-
-  // QR コード読み込み後の処理
-  const onRecognizeCode = (e: string) => {
-    setCode(e);
-    console.log(e);
-    const _code = e;
-
-    // 模擬店かどうか判別
-    if (_code.indexOf("焼きそば") === 0) {
-      // 品ごとに分割
-      const _allArray = _code.replace(/\s+/g, "").split(";");
-      var _nameArray: string[] = new Array(_allArray.length - 1);
-      var _costArray: number[] = new Array(_allArray.length - 1);
-      var _qtyArray: number[] = new Array(_allArray.length - 1);
-      var _sumArray: number[] = new Array(_allArray.length - 1);
-      // それぞれの要素に分割
-      for (let i = 0; i < _allArray.length; i++) {
-        let a = _allArray[i].split(",");
-        let name = a[0];
-        let cost = Number(a[1]);
-        let qty = Number(a[2]);
-        let eachSum = Number(a[3]);
-        _nameArray[i] = name;
-        _costArray[i] = cost;
-        _qtyArray[i] = qty;
-        _sumArray[i] = eachSum;
-      }
-
-      // local strage
-      // const keys  = Object.keys(localStorage);
-      let d = new Date();
-      let year = d.getFullYear();
-      let month = d.getMonth() + 1;
-      let day = d.getDate();
-      let hour = d.getHours().toString().padStart(2, '0');
-      let minute = d.getMinutes().toString().padStart(2, '0');
-      let seconds = d.getSeconds().toString().padStart(2, '0');
-      let UTCtime = d.getTime().toString().slice(0, -3);
-      const date = UTCtime + ")" + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + seconds;
-      //console.log(date);
-
-      //表示する商品
-      products = [];
-      for (let i = 0; i < _nameArray.length - 1; i++) {
-        if (_qtyArray[i] !== 0) {
-          products.push(
-            {
-              name: _nameArray[i],
-              quantity: _qtyArray[i]
-            }
-          );
-        }
-      }
-      let saveData: string[] = [];
-      for (let i = 0; i < products.length; i++) {
-        saveData.push(JSON.stringify([products[i].name, products[i].quantity]))
-      }
-      //localStorageに保存
-      localStorage.setItem(date, saveData.join());
-      console.log(date);
-      console.log(saveData.join());
-
-      timeArray = [];
-      quantityArray = [];
-      let keySplitArray: string[][] = []
-      for (let i = 0; i < localStorage.length; i++) {
-        keySplitArray.push(Object.keys(localStorage)[i].split(')'));
-      }
-      keySplitArray.sort(function (a, b) { return (Number(a[0]) - Number(b[0])); });
-      for (let i = 0; i < localStorage.length; i++) {
-        timeArray.unshift(keySplitArray[i][1]);
-      }
-      console.log(timeArray);
-      for (let i = 0; i < localStorage.length; i++) {
-        quantityArray.unshift(localStorage.getItem(keySplitArray[i][0] + ")" + keySplitArray[i][1]));
-      }
-      items = timeArray.map((time, index) => ({ time, quantity: quantityArray[index] }));
-      setData(timeArray.map((time, index) => ({ time, quantity: quantityArray[index] })));
-    }
-
-  }
-
-  // ページリロード
-  function reloadPage() {
-    window.location.reload();
-  }
 
   // ページ処理
   
