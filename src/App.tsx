@@ -296,73 +296,22 @@ function App() {
 
   }
 
-  // react-zxing の処理
-  // const [qr_result, setResult] = useState(""); // テキストを出力する際(デバッグ)に利用
-
-  const [, setResult] = useState("");
-  const { ref } = useZxing({
-    onDecodeResult(qr_result) {
-      console.log(qr_result);
-      if (QR_flag === false) {
-        setFlag(true);
-        const outputText = qr_result.getText();
-
-        onRecognizeCode(outputText); // 結果を渡す
-        setResult(outputText);
-
-        Page2(); // Page2 を開く
-      }
-      stopScanning(); // QR コードが読み取れた時に止める
-    },
-  });
-  // QRコードの読み取りを開始する
-  // const startScanning = () => {
-  //   if (ref.current) {
-  //     ref.current.play(); // ビデオ再生を開始する
-  //   }
-  // };
-  // QRコードの読み取りを停止する
-  const stopScanning = () => {
-    if (ref.current) {
-      ref.current.pause(); // ビデオ再生を停止する
-    }
-  };
   // ページリロード
   function reloadPage() {
     window.location.reload();
   }
 
   // ページ処理
-  const [isVisible1, setIsVisible1] = useState<boolean>(true);
-  const [isVisible2, setIsVisible2] = useState<boolean>(false);
-  const [isVisible3, setIsVisible3] = useState<boolean>(false);
+  
+  const [isVisible3, setIsVisible3] = useState<boolean>(true);
   const [isVisible4, setIsVisible4] = useState<boolean>(false);
-  const Page1 = () => {
-    setIsVisible1(true);
-    setIsVisible2(false);
-    setIsVisible3(false);
-    setIsVisible4(false);
-    reloadPage();
-    //QRコード後の処理のフラグを消すこと！
-    setFlag(false);
-  }
-  const Page2 = () => {
-    setIsVisible1(false);
-    setIsVisible2(true);
-    setIsVisible3(false);
-    setIsVisible4(false);
-    // stopScanning();
-  }
+
   const Page3 = () => {
-    setIsVisible1(false);
-    setIsVisible2(false);
     setIsVisible3(true);
     setIsVisible4(false);
     // stopScanning();
   }
   const Page4 = () => {
-    setIsVisible1(false);
-    setIsVisible2(false);
     setIsVisible3(false);
     setIsVisible4(true);
     updateData();
@@ -374,45 +323,6 @@ function App() {
       style={{
         margin: "0 10% 68px 10%",
       }}>
-
-      {/* Page1 */}
-      {isVisible1 &&
-        <div id="QR">
-          <h2>QR コード</h2>
-          <video ref={ref}
-            style={{
-              width: "100%",
-              borderRadius: "16px",
-            }} />
-          {/*
-        <p>
-          <span>Last result: </span>
-          <span>{qr_result}</span>
-        </p>
-        */}
-          {/* <Button variant="outlined" onClick={reloadPage}>カメラを再起動</Button> */}
-
-          {/* <p>合計金額: {sum} 円</p> */}
-        </div>
-      }
-      {/* Page2 */}
-      {isVisible2 &&
-        <div id="QRb">
-          <h2>確認</h2>
-          <p>合計金額: {sum} 円</p>
-          <TextField
-            label="入力金額" variant="outlined"
-            type="number"
-            onChange={(e) => setInputValue(parseInt(e.target.value) - sum)}
-          />
-          {/* <Button variant="outlined" onClick={Page1}>戻る</Button> */}
-          <p>おつり: {inputValue} 円</p>
-          <p></p>
-          {/* <h2>商品一覧</h2> */}
-          <Table data={products} />
-        </div>
-      }
-
       {/* Page3 */}
       {isVisible3 &&
         <div id="clalculator">
@@ -440,8 +350,6 @@ function App() {
       {/* footer */}
       <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
         <BottomNavigation>
-          <BottomNavigationAction label="QR コード" icon={<QrCodeIcon />} onClick={Page1} />
-          <BottomNavigationAction label="計算" icon={<ListIcon />} onClick={Page2} />
           <BottomNavigationAction label="電卓" icon={<CalculateIcon />} onClick={Page3} />
           <BottomNavigationAction label="データ" icon={<DataThresholdingIcon />} onClick={Page4} />
         </BottomNavigation>
