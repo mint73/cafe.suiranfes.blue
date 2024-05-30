@@ -14,6 +14,7 @@ export const productData = [
   { product: "パン200円", price: "200" },
   { product: "パン210円", price: "210" },
   { product: "パン220円", price: "220" },
+  { product: "アイス50円", price: "50" },
   { product: "アイス100円", price: "100" },
   { product: "アイス120円", price: "120" },
   { product: "アイス150円", price: "150" },
