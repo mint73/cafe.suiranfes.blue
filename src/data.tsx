@@ -15,12 +15,11 @@ export const productData = [
   { product: "パン210円", price: "210" },
   { product: "パン220円", price: "220" },
   { product: "アイス50円", price: "50" },
+  { product: "アイス80円", price: "80" },
   { product: "アイス100円", price: "100" },
   { product: "アイス120円", price: "120" },
   { product: "アイス150円", price: "150" },
-  { product: "ドリンク120円" ,price: "120" },
-  { product: "ドリンク150円", price: "150" },
-  { product: "ドーナツ", price: "140" },
-  //{product:"与謝野晶子",price:"1700"}
-  //{product:"与謝野晶子mk.2",price:"17000000"}
+  { product: "ドリンク130円", price: "130" },
+  { product: "ドーナツ130円", price: "130" },
+  { product: "ドーナツ140円", price: "140" },
 ];
