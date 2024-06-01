@@ -1,6 +1,7 @@
 //ここに商品のデータを入力してください
 //スペースを入れないように気を付けてください
 export const productData = [
+  { product: "パン100円", price: "100" },
   { product: "パン110円", price: "110" },
   { product: "パン140円", price: "140" },
   { product: "パン150円", price: "150" },
